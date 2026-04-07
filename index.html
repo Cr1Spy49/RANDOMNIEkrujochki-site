@@ -222,18 +222,50 @@
             };
         } catch (err) { alert("Ошибка камеры или Storage!"); }
     };
+// --- ИСПРАВЛЕННОЕ УПРАВЛЕНИЕ ЗАПИСЬЮ ---
 
-    document.getElementById('start-rec').onclick = () => {
+// Кнопка "Начать запись"
+document.getElementById('start-rec').onclick = () => {
+    if (mediaRecorder && mediaRecorder.state === "inactive") {
+        chunks = []; // Очищаем старые данные перед новой записью
         mediaRecorder.start();
+        console.log("Запись пошла...");
         document.getElementById('start-rec').style.display = 'none';
         document.getElementById('stop-rec').style.display = 'block';
-    };
-    document.getElementById('stop-rec').onclick = () => mediaRecorder.stop();
-    document.getElementById('close-rec').onclick = () => {
-        overlay.style.display = 'none';
-        if(videoPreview.srcObject) videoPreview.srcObject.getTracks().forEach(t => t.stop());
-    };
+    }
+};
 
+// Кнопка "Завершить" (Теперь с усиленной логикой)
+document.getElementById('stop-rec').onclick = () => {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop(); // Останавливаем рекордер
+        console.log("Запись остановлена вручную.");
+        
+        // Визуально возвращаем кнопки в исходное состояние
+        document.getElementById('start-rec').style.display = 'block';
+        document.getElementById('stop-rec').style.display = 'none';
+        
+        // Маленький хак: принудительно останавливаем все треки камеры, 
+        // чтобы браузер понял, что запись реально окончена
+        if (videoPreview.srcObject) {
+            videoPreview.srcObject.getTracks().forEach(track => track.stop());
+        }
+    }
+};
+
+// Кнопка "Отмена"
+document.getElementById('close-rec').onclick = () => {
+    overlay.style.display = 'none';
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+    }
+    if (videoPreview.srcObject) {
+        videoPreview.srcObject.getTracks().forEach(track => track.stop());
+    }
+    // Сбрасываем кнопки
+    document.getElementById('start-rec').style.display = 'block';
+    document.getElementById('stop-rec').style.display = 'none';
+};
     // --- ЛЕНТА ---
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
