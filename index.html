@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CriSpy CO. | Кружочки</title>
+    <title>Рандомные кружочки | CriSpy CO.</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -18,217 +18,88 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             background-image: radial-gradient(circle at top right, #1a1a4a, var(--bg-color));
             color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            display: flex; height: 100vh; overflow: hidden;
         }
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 260px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-right: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
+            width: 260px; padding: 25px; display: flex; flex-direction: column; gap: 10px;
+            background: rgba(0, 0, 0, 0.2); border-right: 1px solid var(--glass-border); backdrop-filter: blur(10px);
         }
-
         .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.4rem;
-            font-weight: 900;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
-            color: var(--text-main);
+            display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 900;
+            margin-bottom: 30px; letter-spacing: 1px; color: var(--text-main);
         }
-
-        .logo-area span {
-            background: linear-gradient(45deg, var(--accent-blue), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-area img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-blue);
-            box-shadow: 0 0 15px var(--accent-blue);
-        }
+        .logo-area span { background: linear-gradient(45deg, var(--accent-blue), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-area img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue); }
 
         .side-btn {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 20px;
-            border: none;
-            background: transparent;
-            color: white;
-            border-radius: 18px;
-            cursor: pointer;
-            font-size: 1.05rem;
-            transition: 0.3s;
+            display: flex; align-items: center; gap: 15px; padding: 14px 20px; border: none;
+            background: transparent; color: white; border-radius: 18px; cursor: pointer; transition: 0.3s;
         }
-
-        .side-btn i { width: 25px; text-align: center; color: var(--text-muted); }
         .side-btn:hover { background: rgba(255, 255, 255, 0.1); }
-        .side-btn.active {
-            background: linear-gradient(45deg, var(--accent-blue), var(--accent-pink));
-            font-weight: bold;
-        }
-        .side-btn.active i { color: white; }
+        .side-btn.active { background: linear-gradient(45deg, var(--accent-blue), var(--accent-pink)); font-weight: bold; }
 
         /* --- CONTENT --- */
-        .content-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
+        .content-wrapper { flex: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .top-nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 15px 0;
-            display: flex;
-            justify-content: center;
-            background: rgba(5, 10, 48, 0.6);
-            backdrop-filter: blur(15px);
+            position: sticky; top: 0; z-index: 100; padding: 15px 0; display: flex; justify-content: center;
+            background: rgba(5, 10, 48, 0.6); backdrop-filter: blur(15px);
         }
-
-        .pill-menu {
-            background: var(--card-bg);
-            padding: 5px;
-            border-radius: 25px;
-            display: flex;
-            gap: 5px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .pill-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 10px 25px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
+        .pill-menu { background: var(--card-bg); padding: 5px; border-radius: 25px; display: flex; gap: 5px; border: 1px solid var(--glass-border); }
+        .pill-btn { background: transparent; border: none; color: var(--text-muted); padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: 600; }
         .pill-btn.active { background: rgba(255, 255, 255, 0.15); color: white; }
 
-        /* FEED & POSTS */
-        .feed {
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 20px 20px 120px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
+        .feed { max-width: 600px; margin: 0 auto; width: 100%; padding: 20px 20px 120px 20px; display: flex; flex-direction: column; gap: 25px; }
 
-        .post-card {
-            background: var(--card-bg);
-            border-radius: 30px;
-            padding: 25px;
-            border: 1px solid var(--glass-border);
-        }
+        /* --- POST CARD --- */
+        .post-card { background: var(--card-bg); border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .avatar-small {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(var(--accent-blue), var(--accent-pink));
-        }
+        .post-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .avatar-small { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(var(--accent-blue), var(--accent-pink)); }
 
         .circle-video-box {
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            margin: 0 auto;
-            background: #000;
-            border: 4px solid var(--accent-blue);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 25px rgba(0, 210, 255, 0.2);
-            position: relative;
+            width: 320px; height: 320px; border-radius: 50%; margin: 15px auto; background: #000;
+            border: 4px solid var(--accent-blue); display: flex; justify-content: center; align-items: center;
+            overflow: hidden; position: relative; box-shadow: 0 0 25px rgba(0, 210, 255, 0.2);
         }
+        video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ИНТЕРФЕЙС ВЗАИМОДЕЙСТВИЯ */
-        .post-actions {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .action-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.95rem;
-        }
-
+        .post-actions { display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+        .action-item { cursor: pointer; color: var(--text-muted); display: flex; align-items: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
         .action-item:hover { color: white; }
-        .action-item.like:hover { color: var(--accent-pink); }
-        .action-item.comment:hover { color: var(--accent-blue); }
-        .action-item.repost:hover { color: #00ff88; }
+        
+        /* Стиль для активного лайка */
+        .action-item.liked { color: var(--accent-pink); cursor: default; }
+        .action-item.liked i { transform: scale(1.2); }
 
-        .action-item i { font-size: 1.2rem; }
+        /* --- RECORDER --- */
+        #recorder-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .record-circle { width: 320px; height: 320px; border-radius: 50%; border: 5px solid var(--accent-blue); overflow: hidden; margin-bottom: 25px; background: #000; }
+        .record-controls { display: flex; gap: 20px; }
+        .rec-btn { padding: 15px 30px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; }
+        #start-rec { background: white; color: black; }
+        #stop-rec { background: var(--accent-pink); color: white; display: none; }
+        #close-rec { background: #333; color: white; }
 
-        /* FAB */
+        /* --- FAB --- */
         .floating-button {
-            position: fixed;
-            bottom: 35px;
-            left: 58%;
-            transform: translateX(-50%);
+            position: fixed; bottom: 35px; left: 58%; transform: translateX(-50%);
             background: linear-gradient(45deg, var(--accent-pink), var(--accent-orange));
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 50px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.4);
-            z-index: 1000;
+            color: white; border: none; padding: 18px 40px; border-radius: 50px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.4); z-index: 1000;
         }
 
-        /* RIGHT SIDE */
-        .right-sidebar {
-            width: 300px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            gap: 12px;
-            border-left: 1px solid var(--glass-border);
-        }
-
-        .info-link { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
+        .right-sidebar { width: 300px; padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; border-left: 1px solid var(--glass-border); }
         .copyright { color: rgba(255,255,255,0.2); font-size: 0.8rem; margin-top: 10px; font-weight: bold; }
 
         ::-webkit-scrollbar { width: 0px; }
@@ -236,25 +107,20 @@
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="logo-area">
-            <img src="https://i.ibb.co/VWV0pY6/avatar.png" alt="CriSpy Avatar">
-            <span>CriSpy CO.</span>
+            <img src="https://i.ibb.co/VWV0pY6/avatar.png" alt="Logo">
+            <span>Рандомные кружочки</span>
         </div>
-        
         <button class="side-btn active"><i class="fas fa-home"></i> Лента</button>
         <button class="side-btn"><i class="fas fa-search"></i> Поиск</button>
-        <button class="side-btn"><i class="fas fa-bolt"></i> Ивенты</button>
         <button class="side-btn"><i class="fas fa-bell"></i> Уведомления</button>
         <button class="side-btn"><i class="fas fa-user"></i> Профиль</button>
-
         <div style="margin-top: auto;">
             <button class="side-btn" style="color: var(--accent-pink);"><i class="fas fa-power-off"></i> Выйти</button>
         </div>
     </aside>
 
-    <!-- CONTENT -->
     <div class="content-wrapper">
         <nav class="top-nav">
             <div class="pill-menu">
@@ -264,64 +130,135 @@
             </div>
         </nav>
 
-        <div class="feed">
-            <!-- КАРТОЧКА С ИНТЕРАКЦИЕЙ -->
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="avatar-small"></div>
-                    <div>
-                        <div style="font-weight: bold;">CriSpy_Admin</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">5 минут назад</div>
-                    </div>
-                </div>
-                
-                <div class="circle-video-box">
-                    <i class="fas fa-play" style="font-size: 3rem; color: white; opacity: 0.4;"></i>
-                </div>
+        <div class="feed" id="mainFeed"></div>
 
-                <!-- КНОПКИ ВЗАИМОДЕЙСТВИЯ -->
-                <div class="post-actions">
-                    <div class="action-item like"><i class="far fa-heart"></i> 254</div>
-                    <div class="action-item comment"><i class="far fa-comment"></i> 12</div>
-                    <div class="action-item repost"><i class="fas fa-retweet"></i> 5</div>
-                    <div class="action-item"><i class="far fa-eye"></i> 1.2k</div>
-                </div>
-            </div>
-
-            <!-- ВТОРАЯ КАРТОЧКА -->
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="avatar-small" style="background: var(--accent-orange);"></div>
-                    <div>
-                        <div style="font-weight: bold;">User_777</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">1 час назад</div>
-                    </div>
-                </div>
-                
-                <div class="circle-video-box" style="border-color: var(--accent-pink);">
-                    <i class="fas fa-play" style="font-size: 3rem; color: white; opacity: 0.4;"></i>
-                </div>
-
-                <div class="post-actions">
-                    <div class="action-item like"><i class="far fa-heart"></i> 89</div>
-                    <div class="action-item comment"><i class="far fa-comment"></i> 3</div>
-                    <div class="action-item repost"><i class="fas fa-retweet"></i> 1</div>
-                    <div class="action-item"><i class="far fa-eye"></i> 450</div>
-                </div>
-            </div>
-        </div>
-
-        <button class="floating-button">
+        <button class="floating-button" id="openRecorder">
             <i class="fas fa-video"></i> Отправить кружок
         </button>
     </div>
 
-    <!-- RIGHT BAR -->
+    <div id="recorder-overlay">
+        <div class="record-circle"><video id="preview" autoplay muted playsinline></video></div>
+        <div class="record-controls">
+            <button class="rec-btn" id="start-rec">Начать запись</button>
+            <button class="rec-btn" id="stop-rec">Завершить</button>
+            <button class="rec-btn" id="close-rec">Отмена</button>
+        </div>
+    </div>
+
     <aside class="right-sidebar">
-        <a href="#" class="info-link">Условия сервиса</a>
-        <a href="#" class="info-link">Политика CriSpy CO.</a>
         <div class="copyright">© 2026 CriSpy CO.</div>
     </aside>
 
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    // Добавляем импорт для работы с файлами
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCsH-MHp-Jept8DQfHDxQpxh90lLSuOC_Q",
+        authDomain: "sitekrujki.firebaseapp.com",
+        projectId: "sitekrujki",
+        storageBucket: "sitekrujki.firebasestorage.app", // Проверь, что это совпадает с твоим Storage
+        messagingSenderId: "578855106315",
+        appId: "1:578855106315:web:bc1d906a8b99acabfa940e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app); // Инициализация хранилища
+
+    // --- ЛАЙКИ ---
+    window.likePost = async (id, currentLikes) => {
+        const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '{}');
+        if (likedPosts[id]) return;
+
+        const postRef = doc(db, "posts", id);
+        await updateDoc(postRef, { likes: (currentLikes || 0) + 1 });
+        
+        likedPosts[id] = true;
+        localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+    };
+
+    // --- ЗАПИСЬ И ЗАГРУЗКА ---
+    let mediaRecorder;
+    let chunks = [];
+    const overlay = document.getElementById('recorder-overlay');
+    const videoPreview = document.getElementById('preview');
+
+    document.getElementById('openRecorder').onclick = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            videoPreview.srcObject = stream;
+            overlay.style.display = 'flex';
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = e => chunks.push(e.data);
+            
+            mediaRecorder.onstop = async () => {
+                const blob = new Blob(chunks, { type: 'video/mp4' });
+                const fileName = `video_${Date.now()}.mp4`;
+                const storageRef = ref(storage, 'circles/' + fileName);
+
+                console.log("Загружаем в облако...");
+                
+                // 1. Загружаем файл в Storage
+                const snapshot = await uploadBytes(storageRef, blob);
+                // 2. Получаем вечную ссылку на видео
+                const downloadURL = await getDownloadURL(snapshot.ref);
+
+                // 3. Сохраняем пост в базу
+                await addDoc(collection(db, "posts"), {
+                    videoUrl: downloadURL,
+                    author: "Nikita_CriSpy",
+                    likes: 0,
+                    createdAt: serverTimestamp()
+                });
+
+                console.log("Готово!");
+                chunks = [];
+                stream.getTracks().forEach(t => t.stop());
+                overlay.style.display = 'none';
+            };
+        } catch (err) { alert("Ошибка камеры или Storage!"); }
+    };
+
+    document.getElementById('start-rec').onclick = () => {
+        mediaRecorder.start();
+        document.getElementById('start-rec').style.display = 'none';
+        document.getElementById('stop-rec').style.display = 'block';
+    };
+    document.getElementById('stop-rec').onclick = () => mediaRecorder.stop();
+    document.getElementById('close-rec').onclick = () => {
+        overlay.style.display = 'none';
+        if(videoPreview.srcObject) videoPreview.srcObject.getTracks().forEach(t => t.stop());
+    };
+
+    // --- ЛЕНТА ---
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const feed = document.getElementById('mainFeed');
+        const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '{}');
+        feed.innerHTML = '';
+        snapshot.forEach((postDoc) => {
+            const post = postDoc.data();
+            const isLiked = likedPosts[postDoc.id];
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.innerHTML = `
+                <div class="post-header"><div class="avatar-small"></div><strong>@${post.author}</strong></div>
+                <div class="circle-video-box"><video src="${post.videoUrl}" controls loop></video></div>
+                <div class="post-actions">
+                    <div class="action-item ${isLiked ? 'liked' : ''}" onclick="window.likePost('${postDoc.id}', ${post.likes || 0})">
+                        <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${post.likes || 0}
+                    </div>
+                    <div class="action-item"><i class="far fa-comment"></i></div>
+                    <div class="action-item"><i class="fas fa-share"></i></div>
+                </div>
+            `;
+            feed.appendChild(card);
+        });
+    });
+</script>
 </body>
 </html>
