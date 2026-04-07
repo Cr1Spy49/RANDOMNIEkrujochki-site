@@ -3,160 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя Соцсеть</title>
+    <title>CriSpy CO. | Кружочки</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Дизайн сайта */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f2f5; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-            margin: 0; 
+        :root {
+            --bg-color: #050a30;
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --accent-blue: #00d2ff;
+            --accent-pink: #ff007f;
+            --accent-orange: #ffac1c;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
-        .container { width: 100%; max-width: 600px; }
-        
-        /* Блок создания поста */
-        .create-post { 
-            background: white; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-bottom: 20px; 
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1); 
-        }
-        textarea { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            resize: none; 
-            box-sizing: border-box; 
-            font-family: inherit; 
-            margin-bottom: 10px;
-        }
-        button { 
-            background-color: #1877f2; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            width: 100%;
-        }
-        button:hover { background-color: #166fe5; }
-        button:disabled { background-color: #9cb4d8; cursor: not-allowed; }
 
-        /* Дизайн самого поста */
-        .post { 
-            background: white; 
-            border-radius: 8px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1); 
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top right, #1a1a4a, var(--bg-color));
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
-        .post-author { font-weight: bold; margin-bottom: 5px; color: #050505; }
-        .post-date { font-size: 0.8em; color: #65676b; margin-bottom: 10px; }
-        .post-text { color: #050505; line-height: 1.5; white-space: pre-wrap; }
-        .empty-message { text-align: center; color: #65676b; margin-top: 20px; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .logo-area span {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-area img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            box-shadow: 0 0 15px var(--accent-blue);
+        }
+
+        .side-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 20px;
+            border: none;
+            background: transparent;
+            color: white;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: 0.3s;
+        }
+
+        .side-btn i { width: 25px; text-align: center; color: var(--text-muted); }
+        .side-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .side-btn.active {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-pink));
+            font-weight: bold;
+        }
+        .side-btn.active i { color: white; }
+
+        /* --- CONTENT --- */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            background: rgba(5, 10, 48, 0.6);
+            backdrop-filter: blur(15px);
+        }
+
+        .pill-menu {
+            background: var(--card-bg);
+            padding: 5px;
+            border-radius: 25px;
+            display: flex;
+            gap: 5px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .pill-btn.active { background: rgba(255, 255, 255, 0.15); color: white; }
+
+        /* FEED & POSTS */
+        .feed {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px 20px 120px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-small {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(var(--accent-blue), var(--accent-pink));
+        }
+
+        .circle-video-box {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            margin: 0 auto;
+            background: #000;
+            border: 4px solid var(--accent-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.2);
+            position: relative;
+        }
+
+        /* ИНТЕРФЕЙС ВЗАИМОДЕЙСТВИЯ */
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .action-item:hover { color: white; }
+        .action-item.like:hover { color: var(--accent-pink); }
+        .action-item.comment:hover { color: var(--accent-blue); }
+        .action-item.repost:hover { color: #00ff88; }
+
+        .action-item i { font-size: 1.2rem; }
+
+        /* FAB */
+        .floating-button {
+            position: fixed;
+            bottom: 35px;
+            left: 58%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-orange));
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.4);
+            z-index: 1000;
+        }
+
+        /* RIGHT SIDE */
+        .right-sidebar {
+            width: 300px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 12px;
+            border-left: 1px solid var(--glass-border);
+        }
+
+        .info-link { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
+        .copyright { color: rgba(255,255,255,0.2); font-size: 0.8rem; margin-top: 10px; font-weight: bold; }
+
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Поле для ввода текста -->
-        <div class="create-post">
-            <textarea id="postInput" rows="3" placeholder="Что у вас нового?"></textarea>
-            <button id="publishBtn">Опубликовать</button>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="https://i.ibb.co/VWV0pY6/avatar.png" alt="CriSpy Avatar">
+            <span>CriSpy CO.</span>
+        </div>
+        
+        <button class="side-btn active"><i class="fas fa-home"></i> Лента</button>
+        <button class="side-btn"><i class="fas fa-search"></i> Поиск</button>
+        <button class="side-btn"><i class="fas fa-bolt"></i> Ивенты</button>
+        <button class="side-btn"><i class="fas fa-bell"></i> Уведомления</button>
+        <button class="side-btn"><i class="fas fa-user"></i> Профиль</button>
+
+        <div style="margin-top: auto;">
+            <button class="side-btn" style="color: var(--accent-pink);"><i class="fas fa-power-off"></i> Выйти</button>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content-wrapper">
+        <nav class="top-nav">
+            <div class="pill-menu">
+                <button class="pill-btn active">Рекомендации</button>
+                <button class="pill-btn">Рандом</button>
+                <button class="pill-btn">Подписки</button>
+            </div>
+        </nav>
+
+        <div class="feed">
+            <!-- КАРТОЧКА С ИНТЕРАКЦИЕЙ -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="avatar-small"></div>
+                    <div>
+                        <div style="font-weight: bold;">CriSpy_Admin</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">5 минут назад</div>
+                    </div>
+                </div>
+                
+                <div class="circle-video-box">
+                    <i class="fas fa-play" style="font-size: 3rem; color: white; opacity: 0.4;"></i>
+                </div>
+
+                <!-- КНОПКИ ВЗАИМОДЕЙСТВИЯ -->
+                <div class="post-actions">
+                    <div class="action-item like"><i class="far fa-heart"></i> 254</div>
+                    <div class="action-item comment"><i class="far fa-comment"></i> 12</div>
+                    <div class="action-item repost"><i class="fas fa-retweet"></i> 5</div>
+                    <div class="action-item"><i class="far fa-eye"></i> 1.2k</div>
+                </div>
+            </div>
+
+            <!-- ВТОРАЯ КАРТОЧКА -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="avatar-small" style="background: var(--accent-orange);"></div>
+                    <div>
+                        <div style="font-weight: bold;">User_777</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">1 час назад</div>
+                    </div>
+                </div>
+                
+                <div class="circle-video-box" style="border-color: var(--accent-pink);">
+                    <i class="fas fa-play" style="font-size: 3rem; color: white; opacity: 0.4;"></i>
+                </div>
+
+                <div class="post-actions">
+                    <div class="action-item like"><i class="far fa-heart"></i> 89</div>
+                    <div class="action-item comment"><i class="far fa-comment"></i> 3</div>
+                    <div class="action-item repost"><i class="fas fa-retweet"></i> 1</div>
+                    <div class="action-item"><i class="far fa-eye"></i> 450</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Здесь будут появляться посты -->
-        <div id="feed">
-            <p class="empty-message">Загрузка постов...</p>
-        </div>
+        <button class="floating-button">
+            <i class="fas fa-video"></i> Отправить кружок
+        </button>
     </div>
 
-    <!-- ТВОЙ КОД FIREBASE -->
-    <script type="module">
-        // 1. Импорты (Я добавил сюда Firestore для работы с базой данных)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    <!-- RIGHT BAR -->
+    <aside class="right-sidebar">
+        <a href="#" class="info-link">Условия сервиса</a>
+        <a href="#" class="info-link">Политика CriSpy CO.</a>
+        <div class="copyright">© 2026 CriSpy CO.</div>
+    </aside>
 
-        // 2. Твои ключи
-        const firebaseConfig = {
-            apiKey: "AIzaSyCsH-MHp-Jept8DQfHDxQpxh90lLSuOC_Q",
-            authDomain: "sitekrujki.firebaseapp.com",
-            projectId: "sitekrujki",
-            storageBucket: "sitekrujki.firebasestorage.app",
-            messagingSenderId: "578855106315",
-            appId: "1:578855106315:web:bc1d906a8b99acabfa940e",
-            measurementId: "G-G8FX92GYTB"
-        };
-
-        // 3. Запуск Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app); // Подключаем базу данных
-
-        // 4. Логика интерфейса
-        const postInput = document.getElementById('postInput');
-        const publishBtn = document.getElementById('publishBtn');
-        const feed = document.getElementById('feed');
-
-        // Функция: Отправка поста при нажатии на кнопку
-        publishBtn.addEventListener('click', async () => {
-            const text = postInput.value.trim();
-            if (text === "") return alert("Пост не может быть пустым!");
-
-            publishBtn.disabled = true;
-            publishBtn.innerText = "Публикация...";
-
-            try {
-                // Сохраняем пост в коллекцию "posts"
-                await addDoc(collection(db, "posts"), {
-                    text: text,
-                    author: "Гость", // Пока нет регистрации, все пишут как Гости
-                    createdAt: new Date()
-                });
-                postInput.value = ""; // Очищаем поле ввода
-            } catch (error) {
-                console.error("Ошибка добавления поста: ", error);
-                alert("Ошибка! Проверь настройки Firestore (подробнее ниже).");
-            } finally {
-                publishBtn.disabled = false;
-                publishBtn.innerText = "Опубликовать";
-            }
-        });
-
-        // Функция: Загрузка постов в реальном времени
-        // Сортируем по дате (новые сверху)
-        const q = query(collection(db, "posts"));
-        
-        onSnapshot(q, (snapshot) => {
-            feed.innerHTML = ""; // Очищаем ленту перед отрисовкой новых данных
-            
-            if (snapshot.empty) {
-                feed.innerHTML = "<p class='empty-message'>Постов пока нет. Напиши первый!</p>";
-                return;
-            }
-
-            snapshot.forEach((doc) => {
-                const post = doc.data();
-                const postDate = post.createdAt ? post.createdAt.toDate().toLocaleString() : "Только что";
-                
-                // Рисуем HTML карточку для каждого поста
-                const postElement = document.createElement('div');
-                postElement.className = 'post';
-                postElement.innerHTML = `
-                    <div class="post-author">${post.author}</div>
-                    <div class="post-date">${postDate}</div>
-                    <div class="post-text">${post.text}</div>
-                `;
-                feed.appendChild(postElement);
-            });
-        });
-    </script>
 </body>
 </html>
