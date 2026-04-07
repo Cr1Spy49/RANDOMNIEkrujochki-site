@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя Соцсеть</title>
+    <style>
+        /* Дизайн сайта */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f0f2f5; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            margin: 0; 
+        }
+        .container { width: 100%; max-width: 600px; }
+        
+        /* Блок создания поста */
+        .create-post { 
+            background: white; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); 
+        }
+        textarea { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            resize: none; 
+            box-sizing: border-box; 
+            font-family: inherit; 
+            margin-bottom: 10px;
+        }
+        button { 
+            background-color: #1877f2; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%;
+        }
+        button:hover { background-color: #166fe5; }
+        button:disabled { background-color: #9cb4d8; cursor: not-allowed; }
+
+        /* Дизайн самого поста */
+        .post { 
+            background: white; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); 
+        }
+        .post-author { font-weight: bold; margin-bottom: 5px; color: #050505; }
+        .post-date { font-size: 0.8em; color: #65676b; margin-bottom: 10px; }
+        .post-text { color: #050505; line-height: 1.5; white-space: pre-wrap; }
+        .empty-message { text-align: center; color: #65676b; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Поле для ввода текста -->
+        <div class="create-post">
+            <textarea id="postInput" rows="3" placeholder="Что у вас нового?"></textarea>
+            <button id="publishBtn">Опубликовать</button>
+        </div>
+
+        <!-- Здесь будут появляться посты -->
+        <div id="feed">
+            <p class="empty-message">Загрузка постов...</p>
+        </div>
+    </div>
+
+    <!-- ТВОЙ КОД FIREBASE -->
+    <script type="module">
+        // 1. Импорты (Я добавил сюда Firestore для работы с базой данных)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        // 2. Твои ключи
+        const firebaseConfig = {
+            apiKey: "AIzaSyCsH-MHp-Jept8DQfHDxQpxh90lLSuOC_Q",
+            authDomain: "sitekrujki.firebaseapp.com",
+            projectId: "sitekrujki",
+            storageBucket: "sitekrujki.firebasestorage.app",
+            messagingSenderId: "578855106315",
+            appId: "1:578855106315:web:bc1d906a8b99acabfa940e",
+            measurementId: "G-G8FX92GYTB"
+        };
+
+        // 3. Запуск Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app); // Подключаем базу данных
+
+        // 4. Логика интерфейса
+        const postInput = document.getElementById('postInput');
+        const publishBtn = document.getElementById('publishBtn');
+        const feed = document.getElementById('feed');
+
+        // Функция: Отправка поста при нажатии на кнопку
+        publishBtn.addEventListener('click', async () => {
+            const text = postInput.value.trim();
+            if (text === "") return alert("Пост не может быть пустым!");
+
+            publishBtn.disabled = true;
+            publishBtn.innerText = "Публикация...";
+
+            try {
+                // Сохраняем пост в коллекцию "posts"
+                await addDoc(collection(db, "posts"), {
+                    text: text,
+                    author: "Гость", // Пока нет регистрации, все пишут как Гости
+                    createdAt: new Date()
+                });
+                postInput.value = ""; // Очищаем поле ввода
+            } catch (error) {
+                console.error("Ошибка добавления поста: ", error);
+                alert("Ошибка! Проверь настройки Firestore (подробнее ниже).");
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.innerText = "Опубликовать";
+            }
+        });
+
+        // Функция: Загрузка постов в реальном времени
+        // Сортируем по дате (новые сверху)
+        const q = query(collection(db, "posts"));
+        
+        onSnapshot(q, (snapshot) => {
+            feed.innerHTML = ""; // Очищаем ленту перед отрисовкой новых данных
+            
+            if (snapshot.empty) {
+                feed.innerHTML = "<p class='empty-message'>Постов пока нет. Напиши первый!</p>";
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const post = doc.data();
+                const postDate = post.createdAt ? post.createdAt.toDate().toLocaleString() : "Только что";
+                
+                // Рисуем HTML карточку для каждого поста
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <div class="post-author">${post.author}</div>
+                    <div class="post-date">${postDate}</div>
+                    <div class="post-text">${post.text}</div>
+                `;
+                feed.appendChild(postElement);
+            });
+        });
+    </script>
+</body>
+</html>
